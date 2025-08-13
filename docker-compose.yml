@@ -1,0 +1,56 @@
+version: "3.8"
+
+services:
+  web:
+    build:
+      context: ./apache
+      args:
+        TFM_USER: ${TFM_USER:-admin}
+        TFM_PASS: ${TFM_PASS:-admin123}
+        SERVER_NAME: ${SERVER_NAME:-megda.local}
+    container_name: apache_php_ssl
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - mysql
+      - phpmyadmin
+    volumes:
+      - ./www:/var/www/html
+    restart: unless-stopped
+    networks:
+      - appnet
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql_db
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpass}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-appdb}
+      MYSQL_USER: ${MYSQL_USER:-appuser}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-apppass}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    restart: unless-stopped
+    networks:
+      - appnet
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: ${MYSQL_USER:-appuser}
+      PMA_PASSWORD: ${MYSQL_PASSWORD:-apppass}
+      UPLOAD_LIMIT: 256M
+    expose:
+      - "80"
+    restart: unless-stopped
+    networks:
+      - appnet
+
+networks:
+  appnet:
+
+volumes:
+  mysql_data:
