@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Recurrence Scheduler</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+</head>
+<body class="p-4 bg-light">
+
+<div class="container">
+  <h2>Schedule Recurring Job</h2>
+
+  <form id="recurrenceForm">
+    <!-- Recurrence Pattern -->
+    <div class="mb-3">
+      <label class="form-label">Recurrence Pattern</label>
+      <select class="form-select" id="recurrencePattern" name="pattern">
+        <option value="daily">Daily</option>
+        <option value="weekly">Weekly</option>
+        <option value="monthly">Monthly</option>
+        <option value="yearly">Yearly</option>
+      </select>
+    </div>
+
+    <!-- Repeat Every -->
+    <div class="mb-3">
+      <label class="form-label">Repeat every</label>
+      <div class="input-group">
+        <input type="number" class="form-control" id="interval" value="1" min="1">
+        <span class="input-group-text" id="intervalLabel">day(s)</span>
+      </div>
+    </div>
+
+    <!-- Start and End Time -->
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label class="form-label">Start Time</label>
+        <input type="time" id="startTime" class="form-control">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">End Time</label>
+        <input type="time" id="endTime" class="form-control">
+      </div>
+    </div>
+
+    <!-- Weekly Section -->
+    <div id="weeklySection" class="mb-3 d-none">
+      <label class="form-label">Repeat on</label><br>
+      <div class="btn-group" role="group">
+        <input type="checkbox" class="btn-check" id="mon" value="Mon">
+        <label class="btn btn-outline-primary" for="mon">Mon</label>
+        <input type="checkbox" class="btn-check" id="tue" value="Tue">
+        <label class="btn btn-outline-primary" for="tue">Tue</label>
+        <input type="checkbox" class="btn-check" id="wed" value="Wed">
+        <label class="btn btn-outline-primary" for="wed">Wed</label>
+        <input type="checkbox" class="btn-check" id="thu" value="Thu">
+        <label class="btn btn-outline-primary" for="thu">Thu</label>
+        <input type="checkbox" class="btn-check" id="fri" value="Fri">
+        <label class="btn btn-outline-primary" for="fri">Fri</label>
+        <input type="checkbox" class="btn-check" id="sat" value="Sat">
+        <label class="btn btn-outline-primary" for="sat">Sat</label>
+        <input type="checkbox" class="btn-check" id="sun" value="Sun">
+        <label class="btn btn-outline-primary" for="sun">Sun</label>
+      </div>
+    </div>
+
+    <!-- Monthly Section -->
+    <div id="monthlySection" class="mb-3 d-none">
+      <label class="form-label">Repeat on</label>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="monthlyMode" id="monthDayOption" value="day" checked>
+        <label class="form-check-label" for="monthDayOption">Day
+          <select id="monthDay" class="form-select d-inline w-auto"></select>
+          of the month
+        </label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="monthlyMode" id="weekdayOption" value="weekday">
+        <label class="form-check-label" for="weekdayOption">
+          The
+          <select id="weekdayOrdinal" class="form-select d-inline w-auto">
+            <option value="1">First</option>
+            <option value="2">Second</option>
+            <option value="3">Third</option>
+            <option value="4">Fourth</option>
+            <option value="-1">Last</option>
+          </select>
+          <select id="weekdaySelect" class="form-select d-inline w-auto">
+            <option value="MO">Monday</option>
+            <option value="TU">Tuesday</option>
+            <option value="WE">Wednesday</option>
+            <option value="TH">Thursday</option>
+            <option value="FR">Friday</option>
+            <option value="SA">Saturday</option>
+            <option value="SU">Sunday</option>
+          </select>
+        </label>
+      </div>
+    </div>
+
+    <!-- End Conditions -->
+    <div class="mb-3">
+      <label class="form-label">End</label>
+      <div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="endOption" id="endNever" value="never" checked>
+          <label class="form-check-label" for="endNever">Never</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="endOption" id="endAfter" value="after">
+          <label class="form-check-label" for="endAfter">After <input type="number" id="occurrences" class="form-control d-inline w-auto ms-2" style="display:none;" min="1"></label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="endOption" id="endBy" value="by">
+          <label class="form-check-label" for="endBy">End by <input type="date" id="endDate" class="form-control d-inline w-auto ms-2" style="display:none;"></label>
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-2">Save Recurrence</button>
+  </form>
+
+  <div class="mt-4">
+    <h5>Generated RRULE:</h5>
+    <pre id="rruleOutput" class="bg-white border p-3"></pre>
+  </div>
+</div>
+
+<script>
+  function convertFormToRRule(data) {
+    const pattern = data.pattern.toUpperCase();
+    const interval = data.interval || 1;
+    let rrule = `FREQ=${pattern};INTERVAL=${interval}`;
+
+    if (pattern === 'WEEKLY' && data.days_of_week.length) {
+      const dayMap = { Sun: 'SU', Mon: 'MO', Tue: 'TU', Wed: 'WE', Thu: 'TH', Fri: 'FR', Sat: 'SA' };
+      const byday = data.days_of_week.map(d => dayMap[d]).join(',');
+      rrule += `;BYDAY=${byday}`;
+    }
+
+    if (pattern === 'MONTHLY') {
+      if (data.monthly_mode === 'day') {
+        rrule += `;BYMONTHDAY=${data.month_day}`;
+      } else if (data.monthly_mode === 'weekday') {
+        rrule += `;BYDAY=${data.weekday};BYSETPOS=${data.weekday_ordinal}`;
+      }
+    }
+
+    if (data.end_type === 'after' && data.occurrence_count) {
+      rrule += `;COUNT=${data.occurrence_count}`;
+    } else if (data.end_type === 'by' && data.end_date) {
+      const d = new Date(data.end_date);
+      const formatted = d.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+      rrule += `;UNTIL=${formatted}`;
+    }
+
+    return rrule;
+  }
+
+  $(document).ready(function () {
+    for (let i = 1; i <= 31; i++) {
+      $('#monthDay').append(`<option value="${i}">${i}</option>`);
+    }
+
+    $('#recurrencePattern').on('change', function () {
+      const pattern = this.value;
+      const labelMap = { daily: 'day(s)', weekly: 'week(s)', monthly: 'month(s)', yearly: 'year(s)' };
+      $('#intervalLabel').text(labelMap[pattern]);
+      $('#weeklySection').toggleClass('d-none', pattern !== 'weekly');
+      $('#monthlySection').toggleClass('d-none', pattern !== 'monthly');
+    });
+
+    $('input[name="endOption"]').on('change', function () {
+      $('#occurrences, #endDate').hide();
+      if (this.value === 'after') $('#occurrences').show();
+      if (this.value === 'by') $('#endDate').show();
+    });
+
+    $('#recurrenceForm').on('submit', function (e) {
+      e.preventDefault();
+
+      const days = ['mon','tue','wed','thu','fri','sat','sun'].filter(id => $('#' + id).is(':checked')).map(id => $('#' + id).val());
+
+      const monthly_mode = $('input[name="monthlyMode"]:checked').val();
+
+      const formData = {
+        pattern: $('#recurrencePattern').val(),
+        interval: parseInt($('#interval').val()),
+        days_of_week: days,
+        month_day: parseInt($('#monthDay').val()),
+        monthly_mode: monthly_mode,
+        weekday: $('#weekdaySelect').val(),
+        weekday_ordinal: parseInt($('#weekdayOrdinal').val()),
+        end_type: $('input[name="endOption"]:checked').val(),
+        occurrence_count: parseInt($('#occurrences').val()) || null,
+        end_date: $('#endDate').val() || null,
+        start_time: $('#startTime').val(),
+        end_time: $('#endTime').val()
+      };
+
+      console.log('Form Data:', formData); // Debug log
+
+      const rrule = convertFormToRRule(formData);
+      $('#rruleOutput').text(rrule + `\nSTART TIME: ${formData.start_time}\nEND TIME: ${formData.end_time}`);
+
+      $.ajax({
+        url: 'http://localhost:3000/api/save-recurrence',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({
+          job_name: 'Sample Job',
+          start_date: new Date().toISOString(),
+          rrule: rrule,
+          start_time: formData.start_time,
+          end_time: formData.end_time
+        }),
+        success: function (response) {
+          alert('Saved to backend!');
+          console.log(response);
+        },
+        error: function (err) {
+          alert('Failed to save.');
+          console.error(err);
+        }
+      });
+    });
+  });
+</script>
+</body>
+</html>
