@@ -59,6 +59,17 @@
     				setcookie("email",$row['email'],time()+86400,'/');
     				setcookie("status",$row['status'],time()+86400,'/');
 
+					setcookie("dashboard_access",$row['dashboard'],time()+86400,'/');
+					setcookie("user_access",$row['user'],time()+86400,'/');
+					setcookie("products_access",$row['products'],time()+86400,'/');
+					setcookie("categories_access",$row['categories'],time()+86400,'/');
+					setcookie("settings_access",$row['settings'],time()+86400,'/');
+					setcookie("orders_access",$row['orders'],time()+86400,'/');
+					setcookie("customers_access",$row['customers'],time()+86400,'/');
+					setcookie("delivery_access",$row['delivery'],time()+86400,'/');
+					setcookie("inventory_access",$row['inventory'],time()+86400,'/');
+					setcookie("reports_access",$row['reports'],time()+86400,'/');
+
                     $row_usrRole=mysqli_fetch_assoc($result_usrRole);
 	                $_SESSION['dashboard_access'] = $row_usrRole['dashboard'];
 	                $_SESSION['user_access'] = $row_usrRole['user'];
