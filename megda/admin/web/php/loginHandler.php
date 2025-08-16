@@ -62,6 +62,8 @@
 	                $_SESSION['inventory_access'] = $row_usrRole['inventory'];
 	                $_SESSION['reports_access'] = $row_usrRole['reports'];
 
+					session_write_close();
+					
                     $token = array(
                        "iss" => $iss,
                        "aud" => $aud,
