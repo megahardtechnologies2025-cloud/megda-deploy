@@ -1,11 +1,11 @@
 <?php
 session_start();
-$user_access_list = substr($_SESSION["user_access"],0,1);
-$user_access_add = substr($_SESSION["user_access"],1,1);
-$user_access_update = substr($_SESSION["user_access"],2,1);
-$user_access_delete = substr($_SESSION["user_access"],3,1);
+$user_access_list = substr($_COOKIE["user_access"],0,1);
+$user_access_add = substr($_COOKIE["user_access"],1,1);
+$user_access_update = substr($_COOKIE["user_access"],2,1);
+$user_access_delete = substr($_COOKIE["user_access"],3,1);
 
-$loggedin_user = $_SESSION['UserId'];
+$loggedin_user = $_COOKIE['UserId'];
 
 include_once 'dbh.php';
 $request = "default";
