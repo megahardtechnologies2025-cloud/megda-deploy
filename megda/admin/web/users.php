@@ -52,7 +52,7 @@ if (isset($_COOKIE['PHPSESSID'])){
                                 <h6 class="card-subtitle">Users are the set of people who can access this application. Users should always be created with appropriate previlages. Refer Documentation <a href="https://datatables.net/">User Creation</a></h6>
                                 <div class="table-responsive">
                                     <input id="useracc" value="<?php echo $_SESSION["user_access"]?>" type="hidden">
-                                    <button id = "AddEmployee" class="btn btn-primary" style="float:right;" data-toggle="modal" data-target="#insertModal">Add User</button>
+                                    <button id = "AddUser" class="btn btn-primary" style="float:right;" data-toggle="modal" data-target="#insertModal">Add User</button>
                                     <table id="user_table" class="table table-striped table-bordered display nowrap stats-table cell-border compact stripe">
                                         <thead>
                 					        <tr> 
@@ -159,7 +159,7 @@ if (isset($_COOKIE['PHPSESSID'])){
                             <input type="hidden" class="form-control" id="userid" readonly>   
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-success btn-sm" id="btn_empsave">Save</button>
+                            <button type="button" class="btn btn-success btn-sm" id="btn_usersave">Save</button>
                             <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
                         </div>
                     </div>
@@ -445,8 +445,7 @@ if (isset($_COOKIE['PHPSESSID'])){
               { "sWidth": "20%" },
               { "sWidth": "6%" },
               { "sWidth": "6%" },
-              { "sWidth": "6%" },
-              { "sWidth": "6%" },
+              { "sWidth": "12%" },
               { "sWidth": "16%" },
             ],
             dom: 'Bfrtip',
