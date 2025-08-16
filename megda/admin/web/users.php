@@ -391,26 +391,9 @@ if (isset($_COOKIE['PHPSESSID'])){
                         return data;
                     }
                 },
-                /*{
-                    "data" : "avatar",
-                    "render": function(data, type, row, meta){
-                        if(type === 'display'){
-                            div_start = '<div class="d-flex align-items-center">';
-                            img ='<img src=' + data + ' style="height: 30pt;width: 30pt;margin-right:10pt;"/>';
-                            if(useracc.substring(2, 3) == "1"){
-                                btnimgedit = '<button class="btn btn-secondary  user_avatar_update" data-id='+ row.id +' data-toggle="modal" data-target="#edit_photo" ><i class="fas fa-user"></i></button>';
-                            }else{
-                                btnimgedit ='';
-                            }
-                            div_end = '</div>';
-                            data = div_start + img + btnimgedit + div_end;
-                        }
-                        return data;
-                    }
-                },*/
                 { 
                     "data": "id",
-                    "render": function(data, type, row, meta){ //data-id='".$row['id']."' data-toggle="modal" data-target="#updateModal"
+                    "render": function(data, type, row, meta){
                         if(type === 'display'){
                             div_start = '<div class="d-flex align-items-center">';
                             if(useracc.substring(2, 3) == "1"){
