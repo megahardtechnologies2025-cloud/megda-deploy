@@ -1,5 +1,14 @@
 <?php
-	session_start();
+	session_set_cookie_params([
+	   'lifetime' => 86400,
+	   'path' => '/',
+	   'domain' => '',      // or your domain if needed
+	   'secure' => false,   // set true if using https
+	   'httponly' => true,
+	   'samesite' => 'None'
+	]);
+	session_start();	
+
 	include_once 'dbh.php';
     include_once 'core.php';
     include_once 'libs/php-jwt-master/src/BeforeValidException.php';
