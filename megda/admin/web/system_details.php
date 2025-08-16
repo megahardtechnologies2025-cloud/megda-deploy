@@ -5,12 +5,12 @@ session_start();
 if (isset($_COOKIE['PHPSESSID'])){
 	include_once 'php/dbh.php';
 	
-	$user_access_list = substr($_SESSION["user_access"],0,1);
-	$user_access_add = substr($_SESSION["user_access"],1,1);
-	$user_access_update = substr($_SESSION["user_access"],2,1);
-	$user_access_delete = substr($_SESSION["user_access"],3,1);
+	$user_access_list = substr($_COOKIE["user_access"],0,1);
+	$user_access_add = substr($_COOKIE["user_access"],1,1);
+	$user_access_update = substr($_COOKIE["user_access"],2,1);
+	$user_access_delete = substr($_COOKIE["user_access"],3,1);
 
-	if($_SESSION["user_access"] == "0000"){
+	if($_COOKIE["user_access"] == "0000"){
 	    header('Location: noaccess.php');    
 	}
 
@@ -92,7 +92,7 @@ if (isset($_COOKIE['PHPSESSID'])){
     							<div class="tab-pane active" id="entities" role="tabpanel">
         							<div class="p-20">
                                 <div class="table-responsive">
-                                    <input id="useracc" value="<?php echo $_SESSION["user_access"]?>" type="hidden">
+                                    <input id="useracc" value="<?php echo $_COOKIE["user_access"]?>" type="hidden">
                                     <button id = "AddEntity" class="btn btn-primary" style="float:right;" data-toggle="modal" data-target="#insertModal">Add Data Entity</button>
                                     <table id="entity_table" class="table table-striped table-bordered display stats-table cell-border compact stripe">
                                         <thead>
