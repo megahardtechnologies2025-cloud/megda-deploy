@@ -10,8 +10,7 @@ header("Access-Control-Allow-Methods: GET, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Content-Length, Accept-Encoding");
 
 
-if($_SESSION['valid']=="VALIDATED")
-{
+if (isset($_COOKIE['PHPSESSID'])){
 	include_once 'php/dbh.php';
 	
 	$user_access_list = substr($_SESSION["user_access"],0,1);
