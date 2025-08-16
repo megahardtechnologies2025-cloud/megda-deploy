@@ -2,8 +2,8 @@
 <html dir="web" lang="en">
 <?php
 session_start();
-if($_SESSION['valid']=="VALIDATED")
-{
+if (isset($_COOKIE['PHPSESSID'])){
+
 	include_once 'php/dbh.php';
 
 
