@@ -5,12 +5,12 @@ session_start();
 if (isset($_COOKIE['PHPSESSID'])){
 	include_once 'php/dbh.php';
 	
-	$user_access_list = substr($_SESSION["user_access"],0,1);
-	$user_access_add = substr($_SESSION["user_access"],1,1);
-	$user_access_update = substr($_SESSION["user_access"],2,1);
-	$user_access_delete = substr($_SESSION["user_access"],3,1);
+	$user_access_list = substr($_COOKIE["user_access"],0,1);
+	$user_access_add = substr($_COOKIE["user_access"],1,1);
+	$user_access_update = substr($_COOKIE["user_access"],2,1);
+	$user_access_delete = substr($_COOKIE["user_access"],3,1);
 
-	if($_SESSION["user_access"] == "0000"){
+	if($_COOKIE["user_access"] == "0000"){
 	    header('Location: noaccess.php');    
 	}	
 
@@ -51,7 +51,7 @@ if (isset($_COOKIE['PHPSESSID'])){
                                 <h4 class="card-title">Systems</h4>
                                 <h6 class="card-subtitle">Systems are the enterprise applications that are enabled for Archival. System details like DB, REST Endpoints, File Systems are specified here. Refer Documentation <a href="https://datatables.net/"> Systems </a></h6>
                                 <div class="table-responsive">
-                                    <input id="useracc" value="<?php echo $_SESSION["user_access"]?>" type="hidden">
+                                    <input id="useracc" value="<?php echo $_COOKIE["user_access"]?>" type="hidden">
                                     <button id = "AddSystem" class="btn btn-primary" style="float:right;" data-toggle="modal" data-target="#insertModal">Add New System</button>
                                     <table id="system_table" class="table table-striped table-bordered display nowrap stats-table cell-border compact stripe">
                                         <thead>
