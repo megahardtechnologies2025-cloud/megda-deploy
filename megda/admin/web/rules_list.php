@@ -10,7 +10,7 @@ header("Access-Control-Allow-Methods: GET, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Content-Length, Accept-Encoding");
 
 
-if (isset($_COOKIE['PHPSESSID'])){
+if (isset($_COOKIE['username'])){
 	include_once 'php/dbh.php';
 	
 	$user_access_list = substr($_COOKIE["user_access"],0,1);
