@@ -172,6 +172,9 @@
                 contentType : 'application/json',
                 data : form_data,
                 dataType:"json",
+                xhrFields: {
+                    withCredentials: true   // ✅ allow cookies/session
+                },
                 success : function(result){
                     console.log(result);
                     if(result.loginstatus == "success"){
