@@ -2,7 +2,7 @@
 <html dir="web" lang="en">
 <?php
 session_start();
-if (isset($_COOKIE['PHPSESSID'])){
+if (isset($_COOKIE['username'])){
 	include_once 'php/dbh.php';
 
 
