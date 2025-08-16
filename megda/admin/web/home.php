@@ -2,8 +2,7 @@
 <html dir="web" lang="en">
 <?php
 session_start();
-if($_SESSION['valid']=="VALIDATED")
-{
+if (isset($_SESSION['valid']) && $_SESSION['valid'] === "VALIDATED") {
 	include_once 'php/dbh.php';
 
 
@@ -497,6 +496,7 @@ if($_SESSION['valid']=="VALIDATED")
 <?php 
 }else{
     header('Location: index.php');
+	exit;
 }
 ?>
 </html>
