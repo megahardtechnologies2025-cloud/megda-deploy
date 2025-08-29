@@ -326,7 +326,7 @@ $escaped_query = escapeshellarg($sql_escaped);
 $escaped_rule_id = escapeshellarg($id);
 $escaped_system = escapeshellarg($source_system);
 $escaped_entity = escapeshellarg($data_entity);
-  
+/*  
 // Use escapeshellarg for each argument
 $cmd = "/usr/local/bin/oracle_wrapper.sh " .
        escapeshellarg($sql) . ' ' .
@@ -342,7 +342,23 @@ $output = shell_exec($cmd);
     
     //$output = shell_exec($command);
     //echo "<pre>$output</pre>";
-    
+		*/
+		$data = [
+		  "query" => $escaped_query,
+		  "rule_id" => $escaped_rule_id,
+		  "system_name" => $escaped_system,
+		  "entity_name" => $escaped_entity
+		];
+		
+		$ch = curl_init("http://megda.local:5000/load_data");
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+		curl_setopt($ch, CURLOPT_HTTPHEADER, ["Content-Type: application/json"]);
+		
+		$response = curl_exec($ch);
+		curl_close($ch);
+		
+		//echo $response;		
         echo 1;
         exit;
     }else{
